@@ -1,1 +1,4 @@
 environment_local
+bash_completions_local
+aliases_local
+functions_local

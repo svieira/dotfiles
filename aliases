@@ -1,0 +1,26 @@
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+
+alias serve='python3 -m http.server'
+
+# Remove any and all target directories from the descendents of this directory
+# to ensure that everything works when re-built
+# Needed when Maven / Gradle / SBT does foolish things (see http://stackoverflow.com/q/4483230/135978)
+alias cleanjvmbuild='find . -name target -type d -exec rm -rf {} \;'
+
+# Some useful voice shortcuts for OS X
+alias robotic="say -v Trinoids"
+alias cultivated="say -v Daniel"
+alias lilt="say -v Fiona"
+
+# ES6 with node >= 0.11
+alias es6='node --use-strict $(node --v8-options | grep harm | awk '"'"'{print $1}'"'"' | xargs)'
+
+# Find this machine's external IP
+alias external_ip='dig +short myip.opendns.com @resolver1.opendns.com'
+
+if [ -f $CONFIGDIR/aliases_local ]; then
+  . $CONFIGDIR/aliases_local
+fi 

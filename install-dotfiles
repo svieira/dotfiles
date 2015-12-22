@@ -1,0 +1,20 @@
+# Run this to install all the dotfiles in $HOME/dotfiles
+set -x
+
+export CONFIGDIR="$HOME/dotfiles";
+git clone https://github.com/svieira/dotfiles $CONFIGDIR
+mv ~/.bashrc ~/.bashrc.old
+ln -s $CONFIGDIR/bashrc ~/.bashrc
+mv ~/.profile ~/.profile.old
+ln -s $CONFIGDIR/profile ~/.profile
+mv ~/.inputrc ~/.inputrc.old
+ln -s $CONFIGDIR/inputrc ~/.inputrc
+. ~/.bashrc
+
+mkdir $HOME/.local
+mkdir $HOME/.local/bin
+mkdir $HOME/.local/opt
+mkdir $HOME/.local/opt/cdpath
+
+set +x
+echo "Installation complete"

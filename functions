@@ -1,0 +1,3 @@
+if [ -f $CONFIGDIR/functions_local ]; then
+  . $CONFIGDIR/functions_local
+fi

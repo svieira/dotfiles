@@ -1,12 +1,13 @@
 export PATH
 _P=/usr/local
 _O=$_P/opt
-PATH="~/.local/bin:$_P/bin:$_P/sbin:$_O/ruby/bin:$_O/python3/bin:$PATH"
+PATH="~/.local/bin:$_P/bin:$_P/sbin:$_O/ruby/bin:$_O/python3/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 # Since we are handling the virtual environment information ourselves lets disable the status
 export VIRTUAL_ENV_DISABLE_PROMPT=1
-export WORKON_HOME=~/.virtualenvs
+export WORKON_HOME=~/.local/opt/virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=python3
+export PIPSI_HOME=~/.local/opt/pipsi_venvs
 
 # Ignore both leading space commands and duplicates
 export HISTCONTROL=ignoreboth:erasedups
@@ -29,10 +30,6 @@ export LC_ALL="en_US.UTF-8";
 
 # `cd` shortcuts via http://unix.stackexchange.com/q/1469/5217
 export CDPATH=~/.local/opt/cdpath
-
-# Node Version Management
-export NVM_DIR=~/.local/opt/.nvm
-. `brew --prefix nvm`/nvm.sh
 
 if [ -f ./environment_local ]; then
   . ./environment_local

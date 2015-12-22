@@ -1,0 +1,7 @@
+if [ -f /usr/local/share/bash-completion/bash_completion ]; then
+    . /usr/local/share/bash-completion/bash_completion
+fi
+
+if [ -f $CONFIGDIR/bash_completions_local ]; then
+    .  $CONFIGDIR/bash_completions_local
+fi
