@@ -1,0 +1,39 @@
+export PATH
+_P=/usr/local
+_O=$_P/opt
+PATH="~/.local/bin:$_P/bin:$_P/sbin:$_O/ruby/bin:$_O/python3/bin:$PATH"
+
+# Since we are handling the virtual environment information ourselves lets disable the status
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+export WORKON_HOME=~/.virtualenvs
+export VIRTUALENVWRAPPER_PYTHON=python3
+
+# Ignore both leading space commands and duplicates
+export HISTCONTROL=ignoreboth:erasedups
+export HISTSIZE=500000
+export HISTFILESIZE=500000
+export EDITOR=vim
+
+# A better, reasonably fast, less
+# Case insensitive search unless the search term has uppers in it
+# Put the found search term at the 49% point on the screen
+# Output color escape codes raw to the terminal (show colors by default)
+export LESS="-i -j.49 -R"
+
+# Grep is better in color
+export GREP_OPTIONS='--color=auto'
+
+# Prefer US English and use UTF-8
+export LANG="en_US.UTF-8";
+export LC_ALL="en_US.UTF-8";
+
+# `cd` shortcuts via http://unix.stackexchange.com/q/1469/5217
+export CDPATH=~/.local/opt/cdpath
+
+# Node Version Management
+export NVM_DIR=~/.local/opt/.nvm
+. `brew --prefix nvm`/nvm.sh
+
+if [ -f ./environment_local ]; then
+  . ./environment_local
+fi
