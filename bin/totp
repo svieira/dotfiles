@@ -1,0 +1,98 @@
+#!/usr/bin/env bash -f
+
+SCRIPT_NAME=`basename $0`
+
+read -rd '' HELP << HELP
+$SCRIPT_NAME
+Generate a time-based one-time password (TOTP) for an online service
+Similar to Google Authenticator, etc.
+
+Usage:
+
+$SCRIPT_NAME
+  [-k|--key KEYNAME]              - the name of the key to use
+                                    (default: default)
+  [-p|--path PATH]                - file containing the TOTP seed(s)
+                                    Falls back on \$TOTP_SEED_PATH
+                                    (default: ~/.totp)
+  [-i|--install]                  - create the seed DB at --path
+  [... oath-tool-options]         - additional arguments to pass to oath-tool
+                                    (optional)
+
+
+Examples:
+* $SCRIPT_NAME --key aws               # Create a TOTP code for the seed
+                                       # for the key that starts with "aws"
+* $SCRIPT_NAME -k aws                  # An alternative spelling of the above
+* $SCRIPT_NAME -p /other/totp.db aws   # Look up the seed in /other/totp.db
+* $SCRIPT_NAME -w 2                    # Generate three TOTP codes rather than one
+                                       # (-w is from oauth-tool's options)
+
+Requires that oathtool is installed.
+
+# The config file
+
+Any text file containing key=value pairs can be used as the configuration file
+
+An example:
+first-key=secret-seed
+second_key=another-seed
+HELP
+
+oath_tool_args=
+
+while [ "${1+defined}" ]; do
+  case $1 in
+    -h|--help) echo "$HELP" && exit 0;;
+    -p|--path) keypath=$2; shift;;
+    -k|--key) keyname=$2; shift;;
+    -i|--install) install=true;;
+    *) oath_tool_args+="$1 ";;
+  esac
+  shift
+done
+
+keypath=${keypath:-${TOTP_SEED_PATH:-~/.totp}}
+keyname=${keyname:-default}
+
+fail() {
+  echo "$@" >&2
+}
+
+command -v oathtool > /dev/null 2>&1 || (fail "oathtool not found in PATH" && exit 1);
+
+if [ true == "$install" ]; then
+  [ -f "$keypath" ] && fail "$keypath already exists - aborting installation." && exit 1
+  touch "$keypath"
+  chmod go-rwx "$keypath"
+  tee "$keypath" << 'CONFIG' > /dev/null
+# Time-based One-Off Password Codes
+# This configuration provides service=secret-key
+# pairs for the totp script
+# Aliases may be defined using $key-name
+example=secret-key
+alias=$example
+CONFIG
+  exit 0
+fi
+
+if ! [ -f "$keypath" ]; then fail "No config file detected at $keypath" && exit 1; fi
+
+# Taken from http://superuser.com/a/853318/11909
+extract_secret() {
+  local keyname="$1"
+  local keypath="$2"
+  local otpkey=`grep -Ex "^$keyname.*=.*$" "$keypath" | cut -d"=" -f 2 | sed "s/ //g"`
+  [[ "$otpkey" =~ \$.* ]] && extract_secret "${otpkey#$}" "$keypath" && exit 0
+
+  if [ -z "$otpkey" ]; then
+    fail "$SCRIPT_NAME: Unable to find a service with a name matching $keyname"
+    exit 1;
+  fi
+  echo "$otpkey"
+}
+
+otpkey=`extract_secret "$keyname" "$keypath"`
+[ 0 -ne $? ] && exit 1
+
+oathtool --totp -b "$otpkey" $oath_tool_args
