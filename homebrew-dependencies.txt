@@ -1,0 +1,34 @@
+# Taps
+homebrew/completions
+
+# Things that OSX provides generally outdated versions of
+bash
+bash-completion2
+git
+python
+python3
+ruby
+vim
+
+# GNU Modern utilites that OSX doesn't ship because of GPLv3
+coreutils
+findutils
+gnu-sed
+grep
+wget
+
+# Other useful tools
+jq
+moreutils
+netcat
+nvm
+oath-toolkit
+pandoc
+rlwrap
+terminal-notifier
+tree
+vcprompt
+
+# Completion Services
+maven-completion
+pip-completion
