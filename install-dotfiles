@@ -1,7 +1,21 @@
 # Run this to install and update all the dotfiles in $HOME/dotfiles
+
+# Set function via http://stackoverflow.com/a/8574392/135978
+# Also works in bash 3.2 so you can install on a Mac
+# Duplicated here so the installation file can be run stand-alone
+containsElement() {
+  set +x
+  local e
+  for e in "${@:2}"; do [[ "$e" == "$1" ]] && set -x && return 0; done
+  set -x
+  return 1
+}
+
 set -x
 
 export CONFIGDIR="$HOME/dotfiles";
+LOCAL_BIN=~/.local/bin
+
 if [ ! -d $CONFIGDIR ]; then
   git clone https://github.com/svieira/dotfiles $CONFIGDIR
 else
@@ -17,12 +31,47 @@ do
   ln -s $CONFIGDIR/$f ~/.$f
 done
 
-. ~/.bashrc
+. ~/.profile
 
 mkdir -p $HOME/.local
-mkdir -p $HOME/.local/bin
+mkdir -p $LOCAL_BIN
 mkdir -p $HOME/.local/opt
 mkdir -p $HOME/.local/opt/cdpath
+# For vim files: see vimrc
+mkdir -p $HOME/.vim/backups
+mkdir -p $HOME/.vim/swaps
+mkdir -p $HOME/.vim/undo
+
+while : ; do
+  command -v brew >/dev/null 2>&1 && break || {
+    echo >&2 "brew is not currently installed, please install it"
+    read -p "Continue? [Y/n]" answer
+    [[ "$answer" =~ "[nNqQ]" ]] && exit 1;
+  }
+done
+
+# Install Taps
+brew_taps=($(brew tap))
+
+for tap in homebrew/completions homebrew/dupes; do
+  if containsElement "$tap" "${brew_taps[@]}"; then continue; fi
+  brew tap "$tap"
+done
+
+# Install programs
+brew_programs=($(brew list -1))
+
+while read program install_args; do
+  [[ "$program" =~ ^[[:space:]]*(#.*|[[:space:]]*)$ ]] && continue
+  if containsElement "$program" "${brew_programs[@]}"; then continue; fi
+  brew install "$program" $install_args
+done < $CONFIGDIR/homebrew-dependencies.txt
+
+for program in $CONFIGDIR/bin/*; do
+  program=${program##*/}
+  [[ -f $LOCAL_BIN/$program ]] && continue
+  ln -s $CONFIGDIR/bin/$program $LOCAL_BIN/$program
+done
 
 set +x
 echo "Installation complete"

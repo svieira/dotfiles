@@ -1,6 +1,3 @@
-# Taps
-homebrew/completions
-
 # Things that OSX provides generally outdated versions of
 bash
 bash-completion2
