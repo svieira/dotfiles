@@ -36,7 +36,7 @@ shopt -s globstar cdspell dirspell
 . $CONFIGDIR/aliases
 . $CONFIGDIR/functions
 
-. `brew --prefix nvm`/nvm.sh
+. /usr/local/opt/nvm/nvm.sh
 . /usr/local/bin/virtualenvwrapper_lazy.sh
 
 _vc_status() {
