@@ -5,7 +5,7 @@ git
 python
 python3
 ruby
-vim
+vim --without-ruby --without-python
 
 # GNU Modern utilites that OSX doesn't ship because of GPLv3
 coreutils
