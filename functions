@@ -153,6 +153,7 @@ history() {
 }
 
 update() {
+    if command -v update_start; then update_start; fi
     brew update && brew upgrade --all
     for venv in $PIPSI_HOME/*; do
         echo Upgrading pip in $venv
