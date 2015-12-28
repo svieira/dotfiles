@@ -100,7 +100,7 @@ bmd() {
 
 # For those times when you need to wrap `set -e` around just *one* command.
 try-or-fail() {
-  $@
+  eval "$@"
   local status=$?
   [ $status -ne 0 ] && echo "Failed to execute $@" && exit $status
 }
@@ -119,6 +119,15 @@ confirm() {
 pause() {
   local ignored
   read -s -r -p "Press any key to continue..." -n 1 ignored
+}
+
+error() {
+  echo >&2 $@
+}
+
+fail() {
+  error $@
+  exit 1
 }
 
 # `tre` is a shorthand for `tree` with hidden files and color enabled, ignoring
@@ -158,6 +167,7 @@ update() {
         boot2docker upgrade
         sudo softwareupdate --list
     fi
+    if command -v update_local; then update_local; fi
 }
 
 
