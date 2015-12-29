@@ -1,3 +1,4 @@
+# vim: set filetype=sh :
 # Set the terminal emulator's title
 title() {
     echo -ne "\033]0;"$*"\007"
@@ -73,6 +74,12 @@ docker-shutdown() {
     boot2docker stop
 }
 
+# Use clipboard in shell pipelines
+# clip | xargs echo           # uses pbpaste
+# ps -A | grep search | clip  # uses pbcopy
+clip() {
+  [ -t 0 ] && pbpaste || pbcopy
+}
 
 # Get the absolute path of a file or directory
 # Via: http://stackoverflow.com/a/23002317/135978
