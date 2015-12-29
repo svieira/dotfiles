@@ -1,0 +1,9 @@
+_vc_status() {
+  vcprompt -t ${VCPROMPT_TIMEOUT:-200} -f " on %n:%b (%r) %m%u"
+}
+
+export PS1="\n{\j} [\!] \u@\[$Yellow\]\h\[$Color_Off\] in \[$Cyan\]\W\[$Color_Off\]\${VIRTUAL_ENV:+ with }\[$Blue\]\${VIRTUAL_ENV##*/}\[$Color_Off\]\[$Green\]\$(_vc_status)\[$Color_Off\]\n\$ "
+
+if [ -f $CONFIGDIR/prompt_local ]; then
+  . $CONFIGDIR/prompt_local
+fi

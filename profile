@@ -35,13 +35,9 @@ shopt -s globstar cdspell dirspell
 . $CONFIGDIR/bash_completions
 . $CONFIGDIR/aliases
 . $CONFIGDIR/functions
+. $CONFIGDIR/prompt
 
 . /usr/local/opt/nvm/nvm.sh
 . /usr/local/bin/virtualenvwrapper_lazy.sh
 
-_vc_status() {
-    vcprompt -t ${VCPROMPT_TIMEOUT:-200} -f " on %n:%b (%r) %m%u"
-}
-
-export PS1="\n{\j} [\!] \u@\[$Yellow\]\h\[$Color_Off\] in \[$Cyan\]\W\[$Color_Off\]\${VIRTUAL_ENV:+ with }\[$Blue\]\${VIRTUAL_ENV##*/}\[$Color_Off\]\[$Green\]\$(_vc_status)\[$Color_Off\]\n\$ "
 
