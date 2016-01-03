@@ -28,17 +28,57 @@ current_time() {
 }
 
 notify() {
-  [[ $# -eq 0 ]] && echo "notify icon [title] message [terminal-notifier-args]" && return 0
-  icon=$1
-  title=$2
-  message=$3
-  if [[ -z $message ]]; then
-    message=$title
-    title=$icon
+  local SCRIPT_NAME=$FUNCNAME
+  local HELP=
+
+  read -rd '' HELP << HELP
+$SCRIPT_NAME
+Put a notification in the notification center
+(requires terminal-notifier)
+
+Usage:
+
+$SCRIPT_NAME
+  -m | --message msg          - The message to display in the notification
+  [-i | --icon  name]         - The name of the icon to display
+                                (default: Terminal)
+  [-t | --title title]        - The title to display for the notification
+                                (default: Terminal)
+  [...notifier-args]          - Additional arguments for terminal-notifier
+HELP
+
+  local notifier_args=
+  local icon=
+  local title=
+  local message=
+
+  while [ "${1+defined}" ]; do
+    case $1 in
+      -h|--help) echo "$HELP" && return 0;;
+      -i|--icon) icon="$2"; shift;;
+      -m|--message) message="$2"; shift;;
+      -t|--title) title="$2"; shift;;
+      *) notifier_args+="$1 ";;
+    esac
+    shift
+  done
+
+  if [ -n "$icon" ]; then
+    [[ ! "$icon" =~ ^(~|/) ]] && icon=~/Pictures/icons/$icon
+    [[ ! "$icon" =~ \.png$ ]] && icon=${icon}.png
   fi
-  [[ ! "$icon" =~ ^(~|/) ]] && icon=~/Pictures/icons/$icon
-  [[ ! "$icon" =~ \.png$ ]] && icon=${icon}.png
-  terminal-notifier -message "$message" -title "$title" -appIcon "$icon" "${@:4}"
+  echo $notifier_args
+  terminal-notifier -message "$message" ${title:+-title "$title"} ${icon:+-appIcon "$icon"} $notifier_args
+}
+
+notify-complete() {
+  ( "${@}" )
+  local status=$?
+  if [ $status -eq 0 ]; then
+    notify --message "Ran ${@}"
+  else
+    notify --message "Failed to run ${@}" --title "Exit status: $status"
+  fi
 }
 
 # assign variableName command --string here
