@@ -112,12 +112,25 @@ endif
 " Start scrolling three lines before the horizontal window border
 set scrolloff=3
 
+set spelllang=en
+set spellfile=$CONFIGDIR/en.utf-8.add
+
+" Commands
+" --------
+
 " sudo write this
 " cmap is a (c)ommand (map)ing
 cmap W! w !sudo tee % >/dev/null
 
 
-" Language specific settings
+" Language / syntax specific settings
+" -----------------------------------
+
+" Add spell-checking and text-wrapping to commit messages
+autocmd Filetype gitcommit setlocal textwidth=72 spell
+
+" javascript support
+autocmd Filetype javascript setlocal expandtab shiftwidth=2 tabstop=4 softtabstop=2
 
 " python support
 " --------------
