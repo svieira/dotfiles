@@ -3,6 +3,9 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
 
+# Enable aliases to be sudo’ed
+alias sudo='sudo '
+
 alias serve='python3 -m http.server'
 
 # Remove any and all target directories from the descendents of this directory
@@ -18,8 +21,8 @@ alias lilt="say -v Fiona"
 # ES6 with node >= 0.11
 alias es6='node --use-strict $(node --v8-options | grep harm | awk '"'"'{print $1}'"'"' | xargs)'
 
-# Find this machine's external IP
 alias external_ip='dig +short myip.opendns.com @resolver1.opendns.com'
+alias local_ip='ipconfig getifaddr en0'
 
 if [ -f $CONFIGDIR/aliases_local ]; then
   . $CONFIGDIR/aliases_local
