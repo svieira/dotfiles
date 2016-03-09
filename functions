@@ -81,6 +81,40 @@ notify-complete() {
   fi
 }
 
+toggle-wifi() {
+  local SCRIPT_NAME=$FUNCNAME
+  local HELP=
+
+  read -rd '' HELP << HELP
+$SCRIPT_NAME
+Restart wireless for when things are acting weird
+
+Usage:
+
+$SCRIPT_NAME
+  [-d | --device device-name:en0]      - Device Airport is listening on
+  [-t | --timeout wait-time:1s]        - Time to wait before sending power-on signal again
+HELP
+
+  local timeout=1s;
+  local device=en0;
+
+  while [ "${1+defined}" ]; do
+    case $1 in
+      -h|--help) echo "$HELP" && return 0;;
+      -t|--timeout) timeout="$2"; shift;;
+      -d|--device) device="$2"; shift;;
+    esac
+    shift
+  done
+
+  networksetup -setairportpower "$device" off;
+  echo "Waiting for shutdown to complete ...";
+  sleep $timeout;
+  echo "Restarting ...";
+  networksetup -setairportpower "$device" on;
+}
+
 # assign variableName command --string here
 # echo $variableName
 # Via http://stackoverflow.com/a/21636953/135978
