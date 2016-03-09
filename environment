@@ -13,6 +13,9 @@ export PIPSI_HOME=~/.local/opt/pipsi_venvs
 export HISTCONTROL=ignoreboth:erasedups
 export HISTSIZE=500000
 export HISTFILESIZE=500000
+# Record each line as it gets issued
+PROMPT_COMMAND='history -a'
+
 export EDITOR=vim
 
 # A better, reasonably fast, less
@@ -29,7 +32,10 @@ export LANG="en_US.UTF-8";
 export LC_ALL="en_US.UTF-8";
 
 # `cd` shortcuts via http://unix.stackexchange.com/q/1469/5217
-export CDPATH=~/.local/opt/cdpath
+export CDPATH=".:~/.local/opt/cdpath"
+
+# Automatically trim long paths in the prompt (requires Bash 4.x)
+PROMPT_DIRTRIM=2
 
 if [ -f $CONFIGDIR/environment_local ]; then
   . $CONFIGDIR/environment_local

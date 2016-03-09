@@ -28,6 +28,10 @@ case "$-" in *i*) if [ -r ~/.bashrc ]; then . ~/.bashrc; fi;; esac
 # Spelling corrections on CD
 # Spelling corrections on word-completion for directories
 shopt -s globstar cdspell dirspell
+# Append to history file
+shopt -s histappend
+# Save multi-line commands as one line
+shopt -s cmdhist
 # reedit a history substitution line if it failed
 shopt -s histreedit
 # edit a recalled history line before executing
