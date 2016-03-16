@@ -255,7 +255,3 @@ update() {
     if command -v update_local; then update_local; fi
 }
 
-
-if [ -f $CONFIGDIR/functions_local ]; then
-  . $CONFIGDIR/functions_local
-fi
