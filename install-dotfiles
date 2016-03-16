@@ -13,8 +13,8 @@ containsElement() {
 
 set -x
 
-export CONFIGDIR="$HOME/dotfiles";
-LOCAL_BIN=~/.local/bin
+export CONFIGDIR="${CONFIGDIR:-$HOME/dotfiles}";
+LOCAL_BIN=${LOCAL_BIN:-~/.local/bin}
 
 if [ ! -d $CONFIGDIR ]; then
   git clone https://github.com/svieira/dotfiles $CONFIGDIR
