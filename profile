@@ -20,32 +20,15 @@ else
   echo "Missing $HOME/dotfiles. Please install from GitHub."
 fi
 
-export XDG_CONFIG_HOME=$CONFIGDIR
-
 case "$-" in *i*) if [ -r ~/.bashrc ]; then . ~/.bashrc; fi;; esac
 
-# Recursive globbing, e.g. `echo **/*.txt`
-# Spelling corrections on CD
-# Spelling corrections on word-completion for directories
-shopt -s globstar cdspell dirspell
-# Append to history file
-shopt -s histappend
-# Save multi-line commands as one line
-shopt -s cmdhist
-# reedit a history substitution line if it failed
-shopt -s histreedit
-# edit a recalled history line before executing
-shopt -s histverify
-
 # Load all the customizations
+. $CONFIGDIR/shell-options
 . $CONFIGDIR/environment
 . $CONFIGDIR/bash_colors
 . $CONFIGDIR/bash_completions
 . $CONFIGDIR/aliases
 . $CONFIGDIR/functions
 . $CONFIGDIR/prompt
-
-. /usr/local/opt/nvm/nvm.sh
-. /usr/local/bin/virtualenvwrapper_lazy.sh
-
+. $CONFIGDIR/tools
 

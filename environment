@@ -1,3 +1,7 @@
+# Ensure that XDG-compliant programs know
+# where we want to store our configuration files
+export XDG_CONFIG_HOME=$CONFIGDIR
+
 export PATH
 _P=/usr/local
 _O=$_P/opt
