@@ -3,6 +3,15 @@
 Just like it says on the tin, a collection of dotfiles.
 Take what you like, please leave comments if I'm doing something horribly wrong.
 
+Ideas sourced from:
+
+* https://github.com/brandon-rhodes/homedir
+* https://github.com/mitsuhiko/dotfiles
+* https://github.com/mathiasbynens/dotfiles
+* https://github.com/fredsmith/dotfiles
+
+(Among others)
+
 ## Installing
 
 * Download [`install-dotfiles`](https://raw.githubusercontent.com/svieira/dotfiles/master/install-dotfiles)

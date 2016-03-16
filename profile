@@ -1,10 +1,3 @@
-# Ideas sourced from:
-# * https://github.com/brandon-rhodes/homedir
-# * https://github.com/mitsuhiko/dotfiles
-# * https://github.com/mathiasbynens/dotfiles
-# * https://github.com/fredsmith/dotfiles
-# (Among others)
-
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 fd=0   # stdin
