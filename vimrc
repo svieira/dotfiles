@@ -132,6 +132,9 @@ autocmd Filetype gitcommit setlocal textwidth=72 spell
 " javascript support
 autocmd Filetype javascript setlocal expandtab shiftwidth=2 tabstop=4 softtabstop=2
 
+" bash support
+autocmd Filetype sh setlocal expandtab shiftwidth=2 tabstop=4 softtabstop=2
+
 " python support
 " --------------
 "  don't highlight exceptions and builtins. I love to override them in local

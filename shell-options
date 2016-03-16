@@ -1,3 +1,4 @@
+# vim: set filetype=sh :
 # Recursive globbing, e.g. `echo **/*.txt`
 # Spelling corrections on CD
 # Spelling corrections on word-completion for directories

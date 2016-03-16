@@ -1,3 +1,4 @@
+# vim: set filetype=sh :
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
@@ -24,6 +25,3 @@ alias es6='node --use-strict $(node --v8-options | grep harm | awk '"'"'{print $
 alias external_ip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias local_ip='ipconfig getifaddr en0'
 
-if [ -f $CONFIGDIR/aliases_local ]; then
-  . $CONFIGDIR/aliases_local
-fi 

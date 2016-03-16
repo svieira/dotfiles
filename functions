@@ -1,30 +1,30 @@
 # vim: set filetype=sh :
 # Set the terminal emulator's title
 title() {
-    echo -ne "\033]0;"$*"\007"
+  echo -ne "\033]0;"$*"\007"
 }
 
 # Simpler ssh tunnels
 # tunnel some.host:8080 :9090
 # tunnel another.host:5000 local.dev.host:8080
 tunnel() {
-    local remoteHost=${1/:*/}
-    local remotePort=${1/*:/}
-    local localHost=${2/:*/}
-    local localPort=${2/*:/}
+  local remoteHost=${1/:*/}
+  local remotePort=${1/*:/}
+  local localHost=${2/:*/}
+  local localPort=${2/*:/}
 
-    localHost=${localHost:-localhost}
-    echo "Mapping $remoteHost:$remotePort to $localHost:$localPort"
+  localHost=${localHost:-localhost}
+  echo "Mapping $remoteHost:$remotePort to $localHost:$localPort"
 
-    ssh -N -L $localPort:${localHost}:$remotePort $remoteHost
+  ssh -N -L $localPort:${localHost}:$remotePort $remoteHost
 }
 
 current_date() {
-    date +${1:-%Y-%m-%d}
+  date +${1:-%Y-%m-%d}
 }
 
 current_time() {
-    date +${1:-%H:%M:%S}
+  date +${1:-%H:%M:%S}
 }
 
 notify() {
@@ -119,33 +119,33 @@ HELP
 # echo $variableName
 # Via http://stackoverflow.com/a/21636953/135978
 assign() {
-    local var=$1; shift;
-    local channel=/tmp/assignfifo-${BASH_PID}-${BASH_SUBSHELL}
-    mkfifo $channel
-    exec 3<> $channel
-    "$@" 1>&3
-    local result=$?
-    if [[ $result -eq 0 ]];
-        then read -u3 ${var}
-    fi
-    exec 3>&-
-    rm $channel
-    return $result
+  local var=$1; shift;
+  local channel=/tmp/assignfifo-${BASH_PID}-${BASH_SUBSHELL}
+  mkfifo $channel
+  exec 3<> $channel
+  "$@" 1>&3
+  local result=$?
+  if [[ $result -eq 0 ]];
+    then read -u3 ${var}
+  fi
+  exec 3>&-
+  rm $channel
+  return $result
 }
 
 # Save a few keystrokes
 docker-startup() {
-    boot2docker start
-    # Disable assign for now until I make it more robust
-    # assign DOCKER_HOST boot2docker shellinit
-    # export DOCKER_HOST=${DOCKER_HOST##*=}
-    export DOCKER_CERT_PATH=/Users/sean/.docker/boot2docker-vm
-    export DOCKER_HOST=tcp://192.168.59.103:2376
-    export DOCKER_TLS_VERIFY=1
+  boot2docker start
+  # Disable assign for now until I make it more robust
+  # assign DOCKER_HOST boot2docker shellinit
+  # export DOCKER_HOST=${DOCKER_HOST##*=}
+  export DOCKER_CERT_PATH=/Users/sean/.docker/boot2docker-vm
+  export DOCKER_HOST=tcp://192.168.59.103:2376
+  export DOCKER_TLS_VERIFY=1
 }
 
 docker-shutdown() {
-    boot2docker stop
+  boot2docker stop
 }
 
 # Use clipboard in shell pipelines
@@ -158,18 +158,18 @@ clip() {
 # Get the absolute path of a file or directory
 # Via: http://stackoverflow.com/a/23002317/135978
 abspath() {
-   # $1 : relative filename
-   if [ -d "$1" ]; then
-     # dir
-     echo $(cd "$1"; pwd)
-   elif [ -f "$1" ]; then
-     # file
-     if [[ $1 == */* ]]; then
-       echo $(cd "${1%/*}"; pwd)/${1##*/}
-     else
-       echo $(pwd)/$1
-     fi
-   fi
+  # $1 : relative filename
+  if [ -d "$1" ]; then
+    # dir
+    echo $(cd "$1"; pwd)
+  elif [ -f "$1" ]; then
+    # file
+    if [[ $1 == */* ]]; then
+      echo $(cd "${1%/*}"; pwd)/${1##*/}
+    else
+      echo $(pwd)/$1
+    fi
+  fi
 }
 
 # Bookmark a directory so you can `cd {bookmark-name}` to it from anywhere
@@ -187,14 +187,14 @@ try-or-fail() {
 }
 
 confirm() {
-    local msg=${1:-Are you sure}
-    local choice=
-    read -r -n 1 -p "$msg [y/N]? " choice
-    echo
-    case "$choice" in
-      y*|Y* ) return 0;;
-      * ) return 1;;
-    esac
+  local msg=${1:-Are you sure}
+  local choice=
+  read -r -n 1 -p "$msg [y/N]? " choice
+  echo
+  case "$choice" in
+    y*|Y* ) return 0;;
+    * ) return 1;;
+  esac
 }
 
 pause() {
@@ -217,7 +217,7 @@ fail() {
 # small enough for one screen.
 # VIA: https://github.com/mathiasbynens/dotfiles/blob/287f38e2196d8367cf2cb33b6f75860dbf17492a/.functions#L240-246
 tre() {
-    tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
+  tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
 }
 
 # history with grep
@@ -226,32 +226,32 @@ tre() {
 # history <filter> greped history
 # Taken from humanism.sh
 history() {
-    if [ $# -eq 0 ]; then
-      builtin history
-    # Pass -args to the underlying command
-    elif [[ "$1" == "-"* ]]; then
-      builtin history $@
-    else
-      builtin history | grep $@
-    fi
+  if [ $# -eq 0 ]; then
+    builtin history
+  # Pass -args to the underlying command
+  elif [[ "$1" == "-"* ]]; then
+    builtin history $@
+  else
+    builtin history | grep $@
+  fi
 }
 
 update() {
-    if command -v update_start; then update_start; fi
-    brew update && brew upgrade --all
-    for venv in $PIPSI_HOME/*; do
-        echo Upgrading pip in $venv
-        . $venv/bin/activate && pip install --upgrade pip && deactivate
-    done
-    pipsi upgrade pipsi
-    for package in $(pipsi list | sed -ne 's/^.*Package "\(.*\)".*/\1/p' | grep -v pipsi); do
-        echo pipsi upgrade "$package"
-        pipsi upgrade "$package"
-    done
-    if [[ "$1" == "--all" ]]; then
-        boot2docker upgrade
-        sudo softwareupdate --list
-    fi
-    if command -v update_local; then update_local; fi
+  if command -v update_start; then update_start; fi
+  brew update && brew upgrade --all
+  for venv in $PIPSI_HOME/*; do
+      echo Upgrading pip in $venv
+      . $venv/bin/activate && pip install --upgrade pip && deactivate
+  done
+  pipsi upgrade pipsi
+  for package in $(pipsi list | sed -ne 's/^.*Package "\(.*\)".*/\1/p' | grep -v pipsi); do
+      echo pipsi upgrade "$package"
+      pipsi upgrade "$package"
+  done
+  if [[ "$1" == "--all" ]]; then
+      boot2docker upgrade
+      sudo softwareupdate --list
+  fi
+  if command -v update_local; then update_local; fi
 }
 

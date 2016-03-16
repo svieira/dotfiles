@@ -1,3 +1,4 @@
+# vim: set filetype=sh :
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 fd=0   # stdin
@@ -5,12 +6,10 @@ if ! [[ -t "$fd" || -p /dev/stdin ]]; then
    return
 fi
 
-# set configdir to be ~/dotfiles
-export CONFIGDIR=$HOME;
-if [ -d $HOME/dotfiles ]; then
-  export CONFIGDIR="$HOME/dotfiles";
-else
-  echo "Missing $HOME/dotfiles. Please install from GitHub."
+# Set configdir to be ~/dotfiles unless overridden
+export CONFIGDIR=${CONFIGDIR:-$HOME/dotfiles};
+if [ ! -d "$CONFIGDIR" ]; then
+  echo "Missing $CONFIGDIR. Please install from GitHub."
 fi
 
 case "$-" in *i*) if [ -r ~/.bashrc ]; then . ~/.bashrc; fi;; esac
