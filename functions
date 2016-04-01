@@ -176,7 +176,8 @@ abspath() {
 bmd() {
   local directory=`abspath ${1:-.}`
   local bookmark_name=${2:-${directory##*/}}
-  ln -si $directory $CDPATH/$bookmark_name
+  echo ln -si $directory ${BOOKMARK_DIR:-$CDPATH}/$bookmark_name
+  ln -si $directory ${BOOKMARK_DIR:-$CDPATH}/$bookmark_name
 }
 
 # For those times when you need to wrap `set -e` around just *one* command.

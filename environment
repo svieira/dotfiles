@@ -36,8 +36,9 @@ export GREP_OPTIONS='--color=auto'
 export LANG="en_US.UTF-8";
 export LC_ALL="en_US.UTF-8";
 
+export BOOKMARK_DIR="~/.local/opt/cdpath"
 # `cd` shortcuts via http://unix.stackexchange.com/q/1469/5217
-export CDPATH=".:~/.local/opt/cdpath"
+export CDPATH=".:$BOOKMARK_DIR"
 
 # Automatically trim long paths in the prompt (requires Bash 4.x)
 PROMPT_DIRTRIM=2
