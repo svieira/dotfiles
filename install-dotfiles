@@ -73,5 +73,10 @@ for program in $CONFIGDIR/bin/*; do
   ln -s $CONFIGDIR/bin/$program $LOCAL_BIN/$program
 done
 
+# Local machine setup
+# Ensure that we're using latest bash as our login shell
+echo "/usr/local/bin/bash" | sudo tee --append /etc/shells > /dev/null
+chsh -s /usr/local/bin/bash
+
 set +x
 echo "Installation complete"
