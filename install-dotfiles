@@ -31,6 +31,20 @@ do
   ln -s $CONFIGDIR/$f ~/.$f
 done
 
+# Local machine setup
+# Ensure that we're using latest bash as our login shell
+if ! grep -i /usr/local/bin/bash /etc/shells > /dev/null; then
+  echo "Bash@4 already in /etc/shells"
+else
+  echo "/usr/local/bin/bash" | sudo tee --append /etc/shells > /dev/null
+  chsh -s /usr/local/bin/bash
+fi
+
+if (( BASH_VERSINFO < 4 )); then
+  echo "Descending into subshell using Bash@4"
+  /usr/local/bin/bash -l "$0"
+fi
+
 . ~/.profile
 
 mkdir -p $HOME/.local
@@ -72,11 +86,6 @@ for program in $CONFIGDIR/bin/*; do
   [[ -f $LOCAL_BIN/$program ]] && continue
   ln -s $CONFIGDIR/bin/$program $LOCAL_BIN/$program
 done
-
-# Local machine setup
-# Ensure that we're using latest bash as our login shell
-echo "/usr/local/bin/bash" | sudo tee --append /etc/shells > /dev/null
-chsh -s /usr/local/bin/bash
 
 set +x
 echo "Installation complete"
