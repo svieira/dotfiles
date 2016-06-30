@@ -237,6 +237,28 @@ history() {
   fi
 }
 
+virtualenv-restore() {
+  local venv="$1"
+  local exec_name=python
+  local exec_version=
+  if [[ -L "$venv"/bin/python3 ]]; then
+    exec_version=3;
+  elif [[ -L "$venv"/bin/pypy ]]; then
+    exec_name=pypy
+    if [[ -L "$venv"/bin/pypy3 ]]; then
+      exec_version=3;
+    fi
+  fi
+  gfind "$venv" -type l -xtype l -delete;
+  virtualenv --python=${exec_name}${exec_version} "$venv";
+}
+
+pipsi-restore() {
+  for venv in "$PIPSI_HOME"/*; do
+    virtualenv-restore "$venv"
+  done
+}
+
 update() {
   if command -v update_start; then update_start; fi
   brew update && brew upgrade --all
