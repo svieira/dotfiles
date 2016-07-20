@@ -259,6 +259,28 @@ pipsi-restore() {
   done
 }
 
+# Usage:
+#   on_exit rm -f /tmp/foo
+#   on_exit echo "I am exiting"
+#   tempfile=$(mktemp)
+#   on_exit rm -f "$tempfile"
+# From http://stackoverflow.com/documentation/bash/363/using-trap/2398/accumulate-a-list-of-trap-work-to-run-at-exit
+# Based on http://www.linuxjournal.com/content/use-bash-trap-statement-cleanup-temporary-files
+_on_exit() {
+  for cmd in "${on_exit_items[@]}"; do
+    ( eval "$cmd" )
+  done
+}
+
+on_exit() {
+  [[ "$#" -lt 1 ]] && error "Must provide command to on_exit" && return 1;
+  local n=${#on_exit_items[*]}
+  on_exit_items[$n]="$*"
+  if [[ $n -eq 0 ]]; then
+    trap _on_exit EXIT
+  fi
+}
+
 update() {
   if command -v update_start; then update_start; fi
   brew update && brew upgrade --all
