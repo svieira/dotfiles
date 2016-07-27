@@ -1,5 +1,4 @@
 # vim: set filetype=sh :
 # Load any additional path-modifying or function-providing tools here
-. /usr/local/opt/nvm/nvm.sh
 . /usr/local/bin/virtualenvwrapper_lazy.sh
 

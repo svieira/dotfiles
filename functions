@@ -281,6 +281,30 @@ on_exit() {
   fi
 }
 
+# Lazily load NMV when a node binary is invoked (node / npm / globally installed dependencies
+# Via https://www.reddit.com/r/node/comments/4tg5jg/lazy_load_nvm_for_faster_shell_start/d5ib9fs
+load_nvm() {
+  . /usr/local/opt/nvm/nvm.sh
+}
+
+node() {
+  unset -f node
+  [ -z "$NVM_BIN" ] && load_nvm
+  node $@
+}
+
+npm() {
+  unset -f npm
+  [ -z "$NVM_BIN" ] && load_nvm
+  npm $@
+}
+
+nvm() {
+  unset -f nvm
+  [ -z "$NVM_BIN" ] && load_nvm
+  nvm $@
+}
+
 update() {
   if command -v update_start; then update_start; fi
   brew update && brew upgrade --all
