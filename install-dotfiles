@@ -33,7 +33,7 @@ done
 
 # Local machine setup
 # Ensure that we're using latest bash as our login shell
-if ! grep -i /usr/local/bin/bash /etc/shells > /dev/null; then
+if grep -i /usr/local/bin/bash /etc/shells > /dev/null; then
   echo "Bash@4 already in /etc/shells"
 else
   echo "/usr/local/bin/bash" | sudo tee --append /etc/shells > /dev/null
