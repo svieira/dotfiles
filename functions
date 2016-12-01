@@ -324,3 +324,30 @@ update() {
   if command -v update_local; then update_local; fi
 }
 
+# Turn a URL into a host suitable for ssh / scp
+function url-to-host-name {
+  local SCRIPT_NAME=$FUNCNAME
+  local HELP=
+
+  read -rd '' HELP << HELP
+$SCRIPT_NAME
+Change anything url-ish into a usable host name
+
+Usage:
+
+$SCRIPT_NAME
+    url-like         - the url of the site,
+                       with or without the protocol, port, or path
+                       Or something vaguely in the form of an IPv4 address
+HELP
+
+  while [ "${1+defined}" ]; do
+    case $1 in
+      -h|--help) echo "$HELP" && return 0;;
+      *) echo "$1" | sed -E 's#^(.*://)?(([^:/]+)|([0-9.]+)).*$#\2#g';;
+    esac
+    shift
+  done
+
+  return;
+}
