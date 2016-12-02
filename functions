@@ -305,25 +305,6 @@ nvm() {
   nvm $@
 }
 
-update() {
-  if command -v update_start; then update_start; fi
-  brew update && brew upgrade --all
-  for venv in $PIPSI_HOME/*; do
-      echo Upgrading pip in $venv
-      . $venv/bin/activate && pip install --upgrade pip && deactivate
-  done
-  pipsi upgrade pipsi
-  for package in $(pipsi list | sed -ne 's/^.*Package "\(.*\)".*/\1/p' | grep -v pipsi); do
-      echo pipsi upgrade "$package"
-      pipsi upgrade "$package"
-  done
-  if [[ "$1" == "--all" ]]; then
-      boot2docker upgrade
-      sudo softwareupdate --list
-  fi
-  if command -v update_local; then update_local; fi
-}
-
 # Turn a URL into a host suitable for ssh / scp
 function url-to-host-name {
   local SCRIPT_NAME=$FUNCNAME
@@ -350,4 +331,29 @@ HELP
   done
 
   return;
+}
+
+update() {
+  if command -v update_start; then update_start; fi
+  brew update && brew upgrade --all
+  pipsi upgrade pipsi
+  for package in $(pipsi list | sed -ne 's/^.*Package "\(.*\)".*/\1/p' | grep -v pipsi); do
+    echo pipsi upgrade "$package"
+    pipsi upgrade "$package"
+  done
+  if [[ "$1" == "--all" ]]; then
+    for venv in $PIPSI_HOME/*; do
+      echo Upgrading pip in $venv
+      . $venv/bin/activate && pip install --upgrade pip && deactivate
+    done
+    sudo softwareupdate --list
+  fi
+  if command -v update_local; then update_local; fi
+}
+
+cleanup() {
+  brew prune
+  brew cleanup
+  pipsi-restore
+  if command -v cleanup_local; then cleanup_local; fi
 }
