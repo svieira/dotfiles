@@ -27,3 +27,6 @@ alias local_ip='ipconfig getifaddr en0'
 
 alias human-size="gnumfmt --from=auto --to=iec-i --format='%.2f'"
 alias human-num="gnumfmt --from=auto --format=%\\'.2f"
+
+# Run ImageOptim from the command line (no flags allowed, only positional image args)
+alias image-optim="/Applications/ImageOptim.app/Contents/MacOS/ImageOptim"
