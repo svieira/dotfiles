@@ -1,8 +1,10 @@
 # vim: set filetype=sh :
 # Recursive globbing, e.g. `echo **/*.txt`
+shopt -s globstar
 # Spelling corrections on CD
+shopt -s cdspell
 # Spelling corrections on word-completion for directories
-shopt -s globstar cdspell dirspell
+shopt -s dirspell
 # Append to history file
 shopt -s histappend
 # Save multi-line commands as one line
@@ -11,4 +13,5 @@ shopt -s cmdhist
 shopt -s histreedit
 # edit a recalled history line before executing
 shopt -s histverify
-
+# Turn on extended glob patterns
+shopt -s extglob
