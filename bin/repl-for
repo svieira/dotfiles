@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-printf "REPL for %s\n" "$@"
+printf "REPL for %s\nUse ! to escape commands for the shell and :exit to exit\n" "$@"
 
 notblank() {
   [ $# -gt 0 ]
@@ -10,6 +10,10 @@ while true ; do
   printf "%s> " "$@"
   read -r || break;
   notblank $REPLY || continue;
-  [[ "$REPLY" == "exit" ]] && break
-  eval command \"\$@\" "$REPLY"
+  [[ "$REPLY" == ":exit" ]] && break
+  if [[ "$REPLY" =~ ^!.* ]]; then
+    eval command "${REPLY:1}"
+  else
+    eval command \"\$@\" "$REPLY"
+  fi
 done
