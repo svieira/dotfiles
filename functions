@@ -299,6 +299,12 @@ npm() {
   npm $@
 }
 
+yarn() {
+  unset -f yarn
+  [ -z "$NVM_BIN" ] && load_nvm
+  yarn $@
+}
+
 nvm() {
   unset -f nvm
   [ -z "$NVM_BIN" ] && load_nvm
