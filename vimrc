@@ -24,6 +24,7 @@ set gdefault
 
 " Use UTF-8 without BOM
 set encoding=utf-8 nobomb
+scriptencoding utf-8
 
 " Don’t add empty newlines at the end of files
 set binary
@@ -38,6 +39,9 @@ endif
 
 " Don’t create backups when editing files in certain directories
 set backupskip=/tmp/*,/private/tmp/*
+
+" Store more history entries
+set history=10000
 
 " Respect modeline in files
 set modeline
@@ -63,8 +67,9 @@ set list
 " Highlight searches
 set hlsearch
 
-" Ignore case of searches
+" Ignore case of searches unless searching with upper case letters
 set ignorecase
+set smartcase
 
 " Highlight dynamically as pattern is typed
 set incsearch
