@@ -237,7 +237,7 @@ history() {
   fi
 }
 
-virtualenv-restore() {
+determine-python-version() {
   local venv="$1"
   local exec_name=python
   local exec_version=
@@ -249,13 +249,27 @@ virtualenv-restore() {
       exec_version=3;
     fi
   fi
+  echo "${exec_name}${exec_version}"
+}
+
+virtualenv-restore() {
+  local venv="$1"
+  local python_version=`determine-python-version "$1"`
   gfind "$venv" -type l -xtype l -delete;
-  virtualenv --python=${exec_name}${exec_version} "$venv";
+  virtualenv --python=${python_version} "$venv";
 }
 
 pipsi-restore() {
   for venv in "$PIPSI_HOME"/*; do
     virtualenv-restore "$venv"
+  done
+}
+
+pipsi-recreate() {
+  for venv in "$PIPSI_HOME"/*; do
+    local python_version=`determine-python-version "$venv"`
+    pipsi uninstall "$venv"
+    pipsi install --python=$python_version "$venv"
   done
 }
 
