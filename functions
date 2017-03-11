@@ -266,11 +266,15 @@ pipsi-restore() {
 }
 
 pipsi-recreate() {
+  set -xv
   for venv in "$PIPSI_HOME"/*; do
     local python_version=`determine-python-version "$venv"`
-    pipsi uninstall "$venv"
-    pipsi install --python=$python_version "$venv"
+    local tool_name=`basename "$venv"`
+    [[ "$tool_name" == pipsi ]] && continue
+    pipsi uninstall --yes "$tool_name"
+    pipsi install --python=$python_version "$tool_name"
   done
+  set +xv
 }
 
 # Usage:
