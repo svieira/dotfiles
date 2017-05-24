@@ -133,21 +133,6 @@ assign() {
   return $result
 }
 
-# Save a few keystrokes
-docker-startup() {
-  boot2docker start
-  # Disable assign for now until I make it more robust
-  # assign DOCKER_HOST boot2docker shellinit
-  # export DOCKER_HOST=${DOCKER_HOST##*=}
-  export DOCKER_CERT_PATH=/Users/sean/.docker/boot2docker-vm
-  export DOCKER_HOST=tcp://192.168.59.103:2376
-  export DOCKER_TLS_VERIFY=1
-}
-
-docker-shutdown() {
-  boot2docker stop
-}
-
 # Use clipboard in shell pipelines
 # clip | xargs echo           # uses pbpaste
 # ps -A | grep search | clip  # uses pbcopy
