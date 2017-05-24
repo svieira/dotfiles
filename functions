@@ -222,6 +222,17 @@ history() {
   fi
 }
 
+# cd without path echo when CDPATH is set
+# Taken from https://superuser.com/a/729207
+cd() {
+  if [ -z "$*" ]; then
+    destination=~
+  else
+    destination="$*"
+  fi
+  builtin cd -P "${destination}" >/dev/null
+}
+
 determine-python-version() {
   local venv="$1"
   local exec_name=python
