@@ -25,6 +25,7 @@ rlwrap
 terminal-notifier
 tree
 vcprompt
+ripgrep
 
 # Completion Services
 maven-completion
