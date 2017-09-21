@@ -313,6 +313,12 @@ npm() {
   npm $@
 }
 
+npx() {
+  unset -f npx
+  [ -z "$NVM_BIN" ] && load_nvm
+  npx $@
+}
+
 yarn() {
   unset -f yarn
   [ -z "$NVM_BIN" ] && load_nvm
