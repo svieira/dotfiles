@@ -142,11 +142,9 @@ autocmd Filetype sh setlocal expandtab shiftwidth=2 tabstop=4 softtabstop=2
 
 " python support
 " --------------
-"  don't highlight exceptions and builtins. I love to override them in local
-"  scopes and it sucks ass if it's highlighted then. And for exceptions I
-"  don't really want to have different colors for my own exceptions ;-)
+"  don't highlight exceptions and builtins.
 autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8
-\ formatoptions=croq softtabstop=4 textwidth=74 comments=:#\:,:#
+\ formatoptions=croq softtabstop=4 textwidth=74 foldmethod=indent comments=:#\:,:#
 let python_highlight_all=1
 let python_highlight_exceptions=0
 let python_highlight_builtins=0
