@@ -245,6 +245,9 @@ determine-python-version() {
       exec_version=3;
     fi
   fi
+  if [[ $exec_name != pypy && $exec_version != 3 ]]; then
+    exec_version=2
+  fi
   echo "${exec_name}${exec_version}"
 }
 

@@ -2,8 +2,9 @@
 bash
 bash-completion2
 git
+# This is now python3
 python
-python3
+python@2
 ruby
 vim --without-ruby --without-python
 
