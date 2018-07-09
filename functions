@@ -355,7 +355,7 @@ HELP
 
 update() {
   if command -v update_start; then update_start; fi
-  brew update && brew upgrade --all
+  brew update && brew upgrade
   pipsi upgrade pipsi
   for package in $(pipsi list | sed -ne 's/^.*Package "\(.*\)".*/\1/p' | grep -v pipsi); do
     echo pipsi upgrade "$package"
