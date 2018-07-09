@@ -161,8 +161,8 @@ abspath() {
 bmd() {
   local directory=`abspath ${1:-.}`
   local bookmark_name=${2:-${directory##*/}}
-  echo ln -si $directory ${BOOKMARK_DIR:-$CDPATH}/
-  ln -si $directory ${BOOKMARK_DIR:-$CDPATH}/
+  echo ln -si $directory ${BOOKMARK_DIR:-$CDPATH}/$bookmark_name
+  ln -si $directory ${BOOKMARK_DIR:-$CDPATH}/$bookmark_name
 }
 
 # For those times when you need to wrap `set -e` around just *one* command.
@@ -245,6 +245,9 @@ determine-python-version() {
       exec_version=3;
     fi
   fi
+  if [[ $exec_name != pypy && $exec_version != 3 ]]; then
+    exec_version=2
+  fi
   echo "${exec_name}${exec_version}"
 }
 
@@ -311,6 +314,12 @@ npm() {
   unset -f npm
   [ -z "$NVM_BIN" ] && load_nvm
   npm $@
+}
+
+npx() {
+  unset -f npx
+  [ -z "$NVM_BIN" ] && load_nvm
+  npx $@
 }
 
 yarn() {
