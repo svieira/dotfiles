@@ -383,6 +383,13 @@ update() {
 cleanup() {
   brew prune
   brew cleanup
+
+  # Restore python for pipsi
+  # TODO: Maybe do the same for virtualenvwrapper-managed stuff too.
+  virtualenv --version >&2 > /dev/null
+  # Handle cases where python itself upgrades, clearing out virtualenv completely
+  [[ $? != 0 ]] && pip3 install --force-reinstall virtualenvwrapper
   pipsi-restore
+
   if command -v cleanup_local; then cleanup_local; fi
 }
