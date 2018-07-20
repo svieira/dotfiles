@@ -365,19 +365,30 @@ HELP
 update() {
   if command -v update_start; then update_start; fi
   brew update && brew upgrade
+
   pipsi upgrade pipsi
-  for package in $(pipsi list | sed -ne 's/^.*Package "\(.*\)".*/\1/p' | grep -v pipsi); do
-    echo pipsi upgrade "$package"
-    pipsi upgrade "$package"
+  for venv in $PIPSI_HOME/*; do
+    export PATH=$PATH
+    update-pipsi-package "$venv" &
   done
+  wait
+
   if [[ "$1" == "--all" ]]; then
-    for venv in $PIPSI_HOME/*; do
-      echo Upgrading pip in $venv
-      . $venv/bin/activate && pip install --upgrade pip && deactivate
-    done
     sudo softwareupdate --list
   fi
+
   if command -v update_local; then update_local; fi
+}
+
+update-pipsi-package() {
+  # Nicely updated version taken from https://github.com/mitsuhiko/pipsi/issues/72#issuecomment-402573086
+  package_dir="$1"
+  package_name="$(basename "$package_dir")"
+  echo pipsi upgrade "$package_name"
+  pipsi upgrade "$package_name"
+  . "$package_dir"/bin/activate
+  pip install --upgrade pip
+  deactivate
 }
 
 cleanup() {
