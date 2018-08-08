@@ -43,3 +43,6 @@ export CDPATH=".:$BOOKMARK_DIR"
 # Automatically trim long paths in the prompt (requires Bash 4.x)
 PROMPT_DIRTRIM=2
 
+# Turn off NPM package update-notifier
+export NO_UPDATE_NOTIFIER=true
+
