@@ -34,6 +34,7 @@ set noeol
 set backupdir=~/.vim/backups
 set directory=~/.vim/swaps
 if exists("&undodir")
+	set undofile
 	set undodir=~/.vim/undo
 endif
 
