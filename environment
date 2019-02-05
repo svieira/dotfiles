@@ -46,3 +46,5 @@ PROMPT_DIRTRIM=2
 # Turn off NPM package update-notifier
 export NO_UPDATE_NOTIFIER=true
 
+# I prefer to run cleanup at my own time
+export HOMEBREW_NO_INSTALL_CLEANUP=true
