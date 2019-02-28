@@ -20,6 +20,7 @@ jq
 moreutils
 netcat
 nvm
+yarn
 oath-toolkit
 pandoc
 rlwrap
@@ -27,6 +28,8 @@ terminal-notifier
 tree
 vcprompt
 ripgrep
+fd
+fzf
 
 # Completion Services
 maven-completion
