@@ -26,6 +26,10 @@ set skip-completed-text on
 "\e[B": history-search-forward
 "\e[A": history-search-backward
 
+# Make tab and shift tab cyle through options
+TAB: menu-complete
+"\e[Z": menu-complete-backward
+
 # Allow UTF-8 input and output, instead of showing stuff like $'\0123\0456'
 set input-meta on
 set output-meta on
