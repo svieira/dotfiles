@@ -146,6 +146,7 @@ autocmd Filetype sh setlocal expandtab shiftwidth=2 tabstop=4 softtabstop=2
 "  don't highlight exceptions and builtins.
 autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8
 \ formatoptions=croq softtabstop=4 textwidth=74 foldmethod=indent comments=:#\:,:#
+\ foldlevel=20
 let python_highlight_all=1
 let python_highlight_exceptions=0
 let python_highlight_builtins=0
