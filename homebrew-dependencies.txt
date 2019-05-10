@@ -1,6 +1,6 @@
 # Things that OSX provides generally outdated versions of
 bash
-bash-completion2
+bash-completion@2
 git
 # This is now python3
 python
@@ -30,7 +30,13 @@ vcprompt
 ripgrep
 fd
 fzf
+xsv
+dos2unix
+
+# REPLS
+ammonite-repl
 
 # Completion Services
 maven-completion
 pip-completion
+yarn-completion
