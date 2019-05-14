@@ -404,3 +404,13 @@ cleanup() {
 
   if command -v cleanup_local; then cleanup_local; fi
 }
+
+# Override fzf to use the faster fd instead of find
+# See https://github.com/junegunn/fzf#settings
+_fzf_compgen_path() {
+  fd --hidden --follow --exclude ".git" . "$1"
+}
+
+_fzf_compgen_dir() {
+  fd --type d --hidden --follow --exclude ".git" . "$1"
+}
