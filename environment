@@ -13,6 +13,8 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 export WORKON_HOME=~/.local/opt/virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=python3
 export PIPSI_HOME=~/.local/opt/pipsi_venvs
+# No installing things in the system python
+export PIP_REQUIRE_VIRTUALENV=true
 
 # Ignore both leading space commands and duplicates
 export HISTCONTROL=ignoreboth:erasedups
