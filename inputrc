@@ -35,3 +35,6 @@ set input-meta on
 set output-meta on
 set convert-meta off
 
+# Switch bracketed paste mode on for readline / bash
+# See https://cirw.in/blog/bracketed-paste for more
+set enable-bracketed-paste on
