@@ -19,8 +19,8 @@ alias robotic="say -v Trinoids"
 alias cultivated="say -v Daniel"
 alias lilt="say -v Fiona"
 
-# ES6 with node >= 0.11
-alias es6='node --use-strict $(node --v8-options | grep harm | awk '"'"'{print $1}'"'"' | xargs)'
+# Unreleased ECMAScript features
+alias node-preview='node --use-strict $(node --v8-options | grep harm | awk '"'"'{print $1}'"'"' | xargs)'
 
 alias external_ip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias local_ip='ipconfig getifaddr en0'
