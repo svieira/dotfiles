@@ -1,0 +1,26 @@
+#!/usr/local/bin/bash
+
+# From https://gist.github.com/ezamelczyk/78b9c0dd095f8706a3f6a41e8eae0afd
+# --since="2020-01-01T00:00:00" -- some/path/in/repo
+# FIXME: This script also counts merge commits!
+
+git log --shortstat "$@" | grep -E "(Author: )(\b\s*([a-zA-Z]\w+)){2}|fil(e|es) changed" | awk '
+{
+ if($1 ~ /Author/) {
+  author = $2" "$3
+ } else {
+  files[author]+=$1
+  inserted[author]+=$4
+  deleted[author]+=$6
+  modified[author]+=$4+$6
+  added[author]+=$4-$6
+  commits[author]+=1
+ }
+}
+END {
+  print "author,commits,files_changed,lines_inserted,lines_deleted,lines_modified,lines_added";
+  for (key in files) {
+    print key "," commits[key] "," files[key] "," inserted[key] "," deleted[key] "," modified[key] "," added[key]
+  }
+}
+'
