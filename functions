@@ -405,6 +405,16 @@ cleanup() {
   if command -v cleanup_local; then cleanup_local; fi
 }
 
+join-array() {
+  # Via https://stackoverflow.com/a/23673883
+  # $1 is return variable name
+  # $2 is sep
+  # $3... are the elements to join
+  local retname=$1 sep=$2 ret=$3
+  shift 3 || shift $(($#))
+  printf -v "$retname" "%s" "$ret${@/#/$sep}"
+}
+
 # Override fzf to use the faster fd instead of find
 # See https://github.com/junegunn/fzf#settings
 _fzf_compgen_path() {
