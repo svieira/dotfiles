@@ -366,12 +366,9 @@ update() {
   if command -v update_start; then update_start; fi
   brew update && brew upgrade
 
-  pipsi upgrade pipsi
-  for venv in $PIPSI_HOME/*; do
-    export PATH=$PATH
-    update-pipsi-package "$venv" &
-  done
-  wait
+  export PIP_REQUIRE_VIRTUALENV=false
+  python3 -m pip install -U pipx
+  pipx upgrade-all
 
   if [[ "$1" == "--all" ]]; then
     sudo softwareupdate --list
