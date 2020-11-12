@@ -412,6 +412,12 @@ join-array() {
   printf -v "$retname" "%s" "$ret${@/#/$sep}"
 }
 
+new-password() {
+  local size=24
+  local characters=_A-Z-a-z-0-9
+  < /dev/urandom  gtr -dc "$characters" | head -c$size && echo
+}
+
 # Override fzf to use the faster fd instead of find
 # See https://github.com/junegunn/fzf#settings
 _fzf_compgen_path() {
