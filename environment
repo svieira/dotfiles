@@ -6,7 +6,7 @@ export XDG_CONFIG_HOME=$CONFIGDIR
 export PATH
 _P=/usr/local
 _O=$_P/opt
-PATH="~/.local/bin:$_P/bin:$_P/sbin:$_O/ruby/bin:$_O/python3/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+PATH="$_O/cargo/.bin:~/.local/bin:$_P/bin:$_P/sbin:$_O/ruby/bin:$_O/python3/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 # Since we are handling the virtual environment information ourselves lets disable the status
 export VIRTUAL_ENV_DISABLE_PROMPT=1
@@ -15,6 +15,10 @@ export VIRTUALENVWRAPPER_PYTHON=python3
 export PIPX_HOME=~/.local/opt/pipx_venvs
 # No installing things in the system python
 export PIP_REQUIRE_VIRTUALENV=true
+
+# Put Rust in the same place we put other things
+RUSTUP_HOME=~/.local/opt/rustup
+CARGO_HOME=~/.local/opt/cargo
 
 # Ignore both leading space commands and duplicates
 export HISTCONTROL=ignoreboth:erasedups

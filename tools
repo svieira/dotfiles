@@ -4,3 +4,5 @@
 
 . "$XDG_CONFIG_HOME"/fzf/fzf.bash
 
+. "$HOME/.cargo/env"
+
