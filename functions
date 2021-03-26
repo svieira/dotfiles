@@ -189,11 +189,11 @@ pause() {
 }
 
 error() {
-  echo >&2 $@
+  echo >&2 "$@"
 }
 
 fail() {
-  error $@
+  error "$@"
   exit 1
 }
 
@@ -413,9 +413,76 @@ join-array() {
 }
 
 new-password() {
+  local SCRIPT_NAME=$FUNCNAME
+  local HELP=
+
   local size=24
-  local characters=_A-Z-a-z-0-9
-  < /dev/urandom  gtr -dc "$characters" | head -c$size && echo
+  local characters=
+  local default_characters='[:alnum:][:punct:]'
+
+  read -rd '' HELP << HELP
+$SCRIPT_NAME
+Generate a new password and print it to stdout.
+
+Defaults to producing a password that matches tr's $default_characters
+
+Usage:
+
+$SCRIPT_NAME
+  [-s | --size password size:${size}]           - Size of password to generate
+                                             (default: $size)
+
+  Character classes
+  [-a | --alpha]                           - Add alphabetic characters to the list of allowed characters
+  [-c | --characters]*                     - Allowed characters
+  [-d | --digits]                          - Add numeric characters to the list of allowed characters
+  [-h | --hex]                             - Add hexidecimal characters to the list of allowed characters
+  [-n | --alphanumeric]                    - Add alpha-numeric characters to the list of allowed characters
+  [-p | --punct]                           - Add punctuation characters to the list of allowed characters
+
+HELP
+
+  while [ "${1+defined}" ]; do
+    case $1 in
+      -h|--help) echo "$HELP" && return 0;;
+      -a|--alpha) characters+="[:alpha:]";;
+      -c|--chars|--characters) characters+="$1";;
+      -d|--digits) characters+="[:digits:]";;
+      -h|--hex) characters+="[:xdigits:]";;
+      -n|--alphanumeric) characters+="[:alnum:]";;
+      -p|--punct|--punctuation) characters+="[:punct:]";;
+      -s|--size) size="$1";;
+      *) error "$HELP" Invalid argument "$1" provided; return 1;;
+    esac
+    shift
+  done
+
+  < /dev/urandom  gtr -dc "${characters:-$default_characters}" | head -c$size && echo
+}
+
+dequarantine() {
+  local SCRIPT_NAME=$FUNCNAME
+  local HELP=
+
+  read -rd '' HELP << HELP
+$SCRIPT_NAME
+Remove the quarantine attribute from a downloaded file
+
+Usage:
+
+$SCRIPT_NAME
+    /path/to/executable...
+HELP
+
+  while [ "${1+defined}" ]; do
+    case $1 in
+      -h|--help) echo "$HELP" && return 0;;
+      *) xattr -r -d com.apple.quarantine "$1";;
+    esac
+    shift
+  done
+
+  return;
 }
 
 # Override fzf to use the faster fd instead of find
