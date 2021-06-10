@@ -423,6 +423,7 @@ new-password() {
   local size=24
   local characters=
   local default_characters='[:alnum:][:punct:]'
+  local clipboard_cmd=
 
   read -rd '' HELP << HELP
 $SCRIPT_NAME
@@ -435,6 +436,11 @@ Usage:
 $SCRIPT_NAME
   [-s | --size password size:${size}]           - Size of password to generate
                                              (default: $size)
+
+  [--no-clipboard]                         - Don't copy the new password to the clipboard
+                                             Exclusive of --no-stdout
+  [--no-stdout]                            - Don't echo the new password to STDOUT
+                                             Exclusive of --no-clipboard
 
   Character classes
   [-a | --alpha]                           - Add alphabetic characters to the list of allowed characters
@@ -450,18 +456,25 @@ HELP
     case $1 in
       -h|--help) echo "$HELP" && return 0;;
       -a|--alpha) characters+="[:alpha:]";;
-      -c|--chars|--characters) characters+="$1";;
-      -d|--digits) characters+="[:digits:]";;
-      -h|--hex) characters+="[:xdigits:]";;
+      -c|--chars|--characters) characters+="$2"; shift;;
+      -d|--digits) characters+="[:digit:]";;
+      -h|--hex) characters+="[:xdigit:]";;
       -n|--alphanumeric) characters+="[:alnum:]";;
       -p|--punct|--punctuation) characters+="[:punct:]";;
       -s|--size) size="$1";;
+      --no-stdout) if [ -z "$clipboard_cmd" ]; then clipboard_cmd=clip; else error "Cannot set --no-clipboard and --no-stdout together"; return 1; fi;;
+      --no-clip|--no-clipboard) if [ -z "$clipboard_cmd" ]; then clipboard_cmd="xargs -0"; else error "Cannot set --no-clipboard and --no-stdout together"; return 1; fi;;
       *) error "$HELP" Invalid argument "$1" provided; return 1;;
     esac
     shift
   done
 
-  < /dev/urandom  gtr -dc "${characters:-$default_characters}" | head -c$size && echo
+  if [[ -z "$clipboard_cmd" ]]; then
+    # Bash (as of 5.1.8) doesn't properly handle process substitution inside of command substitution
+    < /dev/urandom  gtr -dc "${characters:-$default_characters}" | head -c$size | tee >( clip ) && echo
+  else
+    < /dev/urandom  gtr -dc "${characters:-$default_characters}" | head -c$size | $clipboard_cmd && echo
+  fi
 }
 
 dequarantine() {
