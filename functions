@@ -188,6 +188,10 @@ pause() {
   read -s -r -p "Press any key to continue..." -n 1 ignored
 }
 
+quiet() {
+ &>/dev/null "${@}"
+}
+
 error() {
   echo >&2 "$@"
 }
