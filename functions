@@ -469,6 +469,7 @@ HELP
     shift
   done
 
+  # TODO: What is output to STDOUT isn't properly encoded
   if [[ -z "$clipboard_cmd" ]]; then
     # Bash (as of 5.1.8) doesn't properly handle process substitution inside of command substitution
     < /dev/urandom  gtr -dc "${characters:-$default_characters}" | head -c$size | tee >( clip ) && echo
