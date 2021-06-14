@@ -256,28 +256,11 @@ determine-python-version() {
 }
 
 virtualenv-restore() {
+  [[ "$1" = "/" ]] && error "Cannot restore at root" && return 1;
   local venv="$1"
   local python_version=`determine-python-version "$1"`
   gfind "$venv" -type l -xtype l -delete;
   virtualenv --python=${python_version} "$venv";
-}
-
-pipsi-restore() {
-  for venv in "$PIPSI_HOME"/*; do
-    virtualenv-restore "$venv"
-  done
-}
-
-pipsi-recreate() {
-  set -xv
-  for venv in "$PIPSI_HOME"/*; do
-    local python_version=`determine-python-version "$venv"`
-    local tool_name=`basename "$venv"`
-    [[ "$tool_name" == pipsi ]] && continue
-    pipsi uninstall --yes "$tool_name"
-    pipsi install --python=$python_version "$tool_name"
-  done
-  set +xv
 }
 
 # Usage:
@@ -393,7 +376,6 @@ update-pipsi-package() {
 }
 
 cleanup() {
-  brew prune
   brew cleanup
 
   # Restore python for pipsi
@@ -401,7 +383,7 @@ cleanup() {
   virtualenv --version >&2 > /dev/null
   # Handle cases where python itself upgrades, clearing out virtualenv completely
   [[ $? != 0 ]] && pip3 install --force-reinstall virtualenvwrapper
-  pipsi-restore
+  pipx reinstall-all
 
   if command -v cleanup_local; then cleanup_local; fi
 }
