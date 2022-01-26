@@ -428,7 +428,7 @@ $SCRIPT_NAME
   [-a | --alpha]                           - Add alphabetic characters to the list of allowed characters
   [-c | --characters]*                     - Allowed characters
   [-d | --digits]                          - Add numeric characters to the list of allowed characters
-  [-h | --hex]                             - Add hexidecimal characters to the list of allowed characters
+  [-x | --hex]                             - Add hexidecimal characters to the list of allowed characters
   [-n | --alphanumeric]                    - Add alpha-numeric characters to the list of allowed characters
   [-p | --punct]                           - Add punctuation characters to the list of allowed characters
 
@@ -440,18 +440,18 @@ HELP
       -a|--alpha) characters+="[:alpha:]";;
       -c|--chars|--characters) characters+="$2"; shift;;
       -d|--digits) characters+="[:digit:]";;
-      -h|--hex) characters+="[:xdigit:]";;
+      -x|--hex) characters+="[:xdigit:]";;
       -n|--alphanumeric) characters+="[:alnum:]";;
       -p|--punct|--punctuation) characters+="[:punct:]";;
-      -s|--size) size="$1";;
+      -s|--size) size="$2"; shift;;
       --no-stdout) if [ -z "$clipboard_cmd" ]; then clipboard_cmd=clip; else error "Cannot set --no-clipboard and --no-stdout together"; return 1; fi;;
       --no-clip|--no-clipboard) if [ -z "$clipboard_cmd" ]; then clipboard_cmd="xargs -0"; else error "Cannot set --no-clipboard and --no-stdout together"; return 1; fi;;
-      *) error "$HELP" Invalid argument "$1" provided; return 1;;
+      *) error "$HELP"; error; error Invalid argument "'$1'" provided; return 1;;
     esac
     shift
   done
 
-  # TODO: What is output to STDOUT isn't properly encoded
+  # TODO: What if output to STDOUT isn't properly encoded
   if [[ -z "$clipboard_cmd" ]]; then
     # Bash (as of 5.1.8) doesn't properly handle process substitution inside of command substitution
     < /dev/urandom  gtr -dc "${characters:-$default_characters}" | head -c$size | tee >( clip ) && echo
