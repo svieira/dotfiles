@@ -141,6 +141,10 @@ autocmd Filetype javascript setlocal expandtab shiftwidth=2 tabstop=4 softtabsto
 " bash support
 autocmd Filetype sh setlocal expandtab shiftwidth=2 tabstop=4 softtabstop=2
 
+" markdown support
+au BufNewFile,BufRead *.markdown,*.mdown,*.mkd,*.mkdn,*.mdwn,*.md  set ft=markdown
+autocmd Filetype markdown setlocal expandtab shiftwidth=2 tabstop=4 softtabstop=2
+
 " python support
 " --------------
 "  don't highlight exceptions and builtins.
