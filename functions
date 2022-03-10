@@ -364,17 +364,6 @@ update() {
   if command -v update_local; then update_local; fi
 }
 
-update-pipsi-package() {
-  # Nicely updated version taken from https://github.com/mitsuhiko/pipsi/issues/72#issuecomment-402573086
-  package_dir="$1"
-  package_name="$(basename "$package_dir")"
-  echo pipsi upgrade "$package_name"
-  pipsi upgrade "$package_name"
-  . "$package_dir"/bin/activate
-  pip install --upgrade pip
-  deactivate
-}
-
 cleanup() {
   brew cleanup
 
@@ -404,7 +393,8 @@ new-password() {
 
   local size=24
   local characters=
-  local default_characters='[:alnum:][:punct:]'
+  local default_punctuation='~!@#$%^&*_+=.|:;,[=-=]'
+  local default_characters='[:alnum:]'$default_punctuation
   local clipboard_cmd=
 
   read -rd '' HELP << HELP
@@ -431,6 +421,9 @@ $SCRIPT_NAME
   [-x | --hex]                             - Add hexidecimal characters to the list of allowed characters
   [-n | --alphanumeric]                    - Add alpha-numeric characters to the list of allowed characters
   [-p | --punct]                           - Add punctuation characters to the list of allowed characters
+                                             (limited to common US punctuation)
+  [-q | --all-punct]                       - Add all punctuation characters to the list of allowed characters
+                                             (will often choose non-US punctuation)
 
 HELP
 
@@ -442,7 +435,8 @@ HELP
       -d|--digits) characters+="[:digit:]";;
       -x|--hex) characters+="[:xdigit:]";;
       -n|--alphanumeric) characters+="[:alnum:]";;
-      -p|--punct|--punctuation) characters+="[:punct:]";;
+      -p|--punct|--punctuation) characters+="$default_punctuation";;
+      -q|--all-punct|--all-punctuation) characters+="[:punct:]";;
       -s|--size) size="$2"; shift;;
       --no-stdout) if [ -z "$clipboard_cmd" ]; then clipboard_cmd=clip; else error "Cannot set --no-clipboard and --no-stdout together"; return 1; fi;;
       --no-clip|--no-clipboard) if [ -z "$clipboard_cmd" ]; then clipboard_cmd="xargs -0"; else error "Cannot set --no-clipboard and --no-stdout together"; return 1; fi;;
@@ -451,6 +445,8 @@ HELP
     shift
   done
 
+  echo "characters=${characters}"
+  echo "default_characters=${default_characters}"
   # TODO: What if output to STDOUT isn't properly encoded
   if [[ -z "$clipboard_cmd" ]]; then
     # Bash (as of 5.1.8) doesn't properly handle process substitution inside of command substitution
