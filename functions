@@ -447,8 +447,6 @@ HELP
     shift
   done
 
-  echo "characters=${characters}"
-  echo "default_characters=${default_characters}"
   # TODO: What if output to STDOUT isn't properly encoded
   if [[ -z "$clipboard_cmd" ]]; then
     # Bash (as of 5.1.8) doesn't properly handle process substitution inside of command substitution
