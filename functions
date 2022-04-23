@@ -418,6 +418,8 @@ $SCRIPT_NAME
 
   Character classes
   [-a | --alpha]                           - Add alphabetic characters to the list of allowed characters
+  [-s | --ascii]                           - Add all non-control ASCII characters to the list of allowed characters
+                                             (from "!" [33] to "~" [126])
   [-c | --characters]*                     - Allowed characters
   [-d | --digits]                          - Add numeric characters to the list of allowed characters
   [-x | --hex]                             - Add hexidecimal characters to the list of allowed characters
@@ -433,6 +435,7 @@ HELP
     case $1 in
       -h|--help) echo "$HELP" && return 0;;
       -a|--alpha) characters+="[:alpha:]";;
+      -s|--ascii) characters+="!-~";;
       -c|--chars|--characters) characters+="$2"; shift;;
       -d|--digits) characters+="[:digit:]";;
       -x|--hex) characters+="[:xdigit:]";;
