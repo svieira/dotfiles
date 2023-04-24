@@ -483,6 +483,7 @@ HELP
 
   return;
 }
+alias unquarantine=dequarantine
 
 # Override fzf to use the faster fd instead of find
 # See https://github.com/junegunn/fzf#settings
