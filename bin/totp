@@ -82,6 +82,7 @@ if ! [ -f "$keypath" ]; then fail "No config file detected at $keypath" && exit 
 extract_secret() {
   local keyname="$1"
   local keypath="$2"
+  echo `grep -Ex "^$keyname.*=.*$" "$keypath"`
   local otpkey=`grep -Ex "^$keyname.*=.*$" "$keypath" | cut -d"=" -f 2 | sed "s/ //g"`
   [[ "$otpkey" =~ \$.* ]] && extract_secret "${otpkey#$}" "$keypath" && exit 0
 
@@ -92,7 +93,15 @@ extract_secret() {
   echo "$otpkey"
 }
 
-otpkey=`extract_secret "$keyname" "$keypath"`
-[ 0 -ne $? ] && exit 1
+if [[ `grep -Ex "^$keyname=.*$" "$keypath"` ]]; then
+  otpkey=`extract_secret "$keyname" "$keypath"`
+  [ 0 -ne $? ] && exit 1
 
-oathtool --totp -b "$otpkey" $oath_tool_args
+  oathtool --totp -b "$otpkey" $oath_tool_args
+elif [[ `grep -Ex "^#$keyname=.*" "$keypath"` ]]; then
+  rg "^#$keyname=(.*)" "$keypath" --replace '$1' | tr -d '\n' | pbcopy
+  echo "$keyname copied"
+else
+  fail "Unable to find key or alias named $keyname"
+  exit 1
+fi
