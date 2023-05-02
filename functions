@@ -485,6 +485,11 @@ HELP
 }
 alias unquarantine=dequarantine
 
+function ocr-clipboard() {
+  echo "$(pngpaste - | tesseract stdin stdout)"
+}
+alias clipboard-ocr=ocr-clipboard
+
 declare -a _command_logging_verbose
 export _command_logging_verbose
 # Inspired by https://unix.stackexchange.com/a/332639
