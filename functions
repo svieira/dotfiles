@@ -485,6 +485,35 @@ HELP
 }
 alias unquarantine=dequarantine
 
+declare -a _command_logging_verbose
+export _command_logging_verbose
+# Inspired by https://unix.stackexchange.com/a/332639
+function _log() {
+  for cmd in "${_command_logging_verbose[@]}"; do
+    if [[ "$1" =~ "$cmd" ]]; then
+      echo "${@}"
+    fi
+  done
+}
+
+# TODO: Make this work for functions
+# Right now log some_function works if you call the function directly
+# but does not work if you call it from another function
+# or from a sub-shell.
+function log() {
+  if [[ "$1" = "--reset" ]]; then
+    _command_logging_verbose=()
+    # Stop tracking commands now
+    trap - DEBUG
+  else
+    _command_logging_verbose+=("${@}")
+    if [[ ${#} = ${#_command_logging_verbose[@]} ]]; then
+      # We had no logged commands before, so add the listener now
+      trap '_log "$BASH_COMMAND"' DEBUG
+    fi
+  fi
+}
+
 # Override fzf to use the faster fd instead of find
 # See https://github.com/junegunn/fzf#settings
 _fzf_compgen_path() {
