@@ -78,12 +78,12 @@ fi
 
 if ! [ -f "$keypath" ]; then fail "No config file detected at $keypath" && exit 1; fi
 
-# Taken from http://superuser.com/a/853318/11909
+# Inspired by http://superuser.com/a/853318/11909
 extract_secret() {
   local keyname="$1"
   local keypath="$2"
-  echo `grep -Ex "^$keyname.*=.*$" "$keypath"`
-  local otpkey=`grep -Ex "^$keyname.*=.*$" "$keypath" | cut -d"=" -f 2 | sed "s/ //g"`
+  local otpkey=`rg "^$keyname.*?=(.*)$" --replace '$1' "$keypath" | sed "s/ //g"`
+  # Handle aliases
   [[ "$otpkey" =~ \$.* ]] && extract_secret "${otpkey#$}" "$keypath" && exit 0
 
   if [ -z "$otpkey" ]; then
