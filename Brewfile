@@ -41,4 +41,7 @@ brew "yarn-completion"
 
 brew "ammonite-repl"
 
-file ~/dotfiles/local/Brewfile.local
+# file "~/dotfiles/local/Brewfile.local"
+# See https://github.com/Homebrew/homebrew-bundle/issues/521#issuecomment-509023309 for why
+# We have to do this and not the more sensible thing
+instance_eval(File.read("#{ENV["HOME"]}/dotfiles/local/Brewfile.local"))
