@@ -389,6 +389,23 @@ join-array() {
   printf -v "$retname" "%s" "$ret${@/#/$sep}"
 }
 
+# Via https://stackoverflow.com/a/13038235
+set_union () {
+   sort $1 $2 | uniq
+}
+
+set_intersection () {
+   sort $1 $2 | uniq -d
+}
+
+set_difference () {
+   sort $1 $2 $2 | uniq -u
+}
+
+set_symmetric_difference() {
+   sort $1 $2 | uniq -u
+}
+
 new-password() {
   local SCRIPT_NAME=$FUNCNAME
   local HELP=
