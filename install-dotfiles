@@ -24,6 +24,19 @@ else
   popd
 fi
 
+while : ; do
+  command -v brew >/dev/null 2>&1 && break || {
+    echo >&2 "brew is not currently installed, please install it"
+    read -p "Continue? [Y/n]" answer
+    [[ "$answer" =~ "[nNqQ]" ]] && exit 1;
+  }
+done
+
+# Install brew-managed programs
+brew bundle install --file $CONFIGDIR/Brewfile
+
+_brew_prefix="$(brew --prefix)"
+
 for f in bashrc profile inputrc vimrc psqlrc
 do
   [ -f ~/.$f -a ! -L ~/.$f ] && mv ~/.$f ~/.$f.old
@@ -33,16 +46,16 @@ done
 
 # Local machine setup
 # Ensure that we're using latest bash as our login shell
-if grep -i /usr/local/bin/bash /etc/shells > /dev/null; then
-  echo "Bash@4 already in /etc/shells"
+if grep -i $_brew_prefix/bin/bash /etc/shells > /dev/null; then
+  echo "Homebrew-managed bash already in /etc/shells"
 else
-  echo "/usr/local/bin/bash" | sudo tee --append /etc/shells > /dev/null
-  chsh -s /usr/local/bin/bash
+  echo "$_brew_prefix/bin/bash" | sudo tee --append /etc/shells > /dev/null
+  chsh -s $_brew_prefix/bin/bash
 fi
 
 if (( BASH_VERSINFO < 4 )); then
-  echo "Descending into subshell using Bash@4"
-  /usr/local/bin/bash -l "$0"
+  echo "Descending into subshell using homebrewed bash"
+  $_brew_prefix/bin/bash -l "$0"
 fi
 
 . ~/.profile
@@ -56,16 +69,6 @@ mkdir -p $HOME/.vim/backups
 mkdir -p $HOME/.vim/swaps
 mkdir -p $HOME/.vim/undo
 
-while : ; do
-  command -v brew >/dev/null 2>&1 && break || {
-    echo >&2 "brew is not currently installed, please install it"
-    read -p "Continue? [Y/n]" answer
-    [[ "$answer" =~ "[nNqQ]" ]] && exit 1;
-  }
-done
-
-# Install brew-managed programs
-brew bundle install --file $CONFIGDIR/Brewfile
 
 # Link all bin files
 for program in $CONFIGDIR/bin/*; do
