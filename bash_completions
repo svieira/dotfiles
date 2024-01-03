@@ -1,6 +1,6 @@
 # vim: set filetype=sh :
-if [ -f /usr/local/share/bash-completion/bash_completion ]; then
-    . /usr/local/share/bash-completion/bash_completion
+if [ -f $PACKAGE_MANAGER_PREFIX/share/bash-completion/bash_completion ]; then
+    . $PACKAGE_MANAGER_PREFIX/share/bash-completion/bash_completion
 fi
 
 # Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards

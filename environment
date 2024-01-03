@@ -4,14 +4,20 @@
 export XDG_CONFIG_HOME=$CONFIGDIR
 
 export PATH
-_P=/usr/local
+if [[ $(sysctl -n machdep.cpu.brand_string) =~ "Apple" ]]; then
+  _P=/opt/homebrew
+else
+  _P=/usr/local
+fi
+
 _O=$_P/opt
 PATH="$_O/cargo/.bin:~/.local/bin:$_P/bin:$_P/sbin:$_O/ruby/bin:$_O/python3/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
+export PACKAGE_MANAGER_PREFIX=$_P
 # Since we are handling the virtual environment information ourselves lets disable the status
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 export WORKON_HOME=~/.local/opt/virtualenvs
-export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
+export VIRTUALENVWRAPPER_PYTHON=$PACKAGE_MANAGER_PREFIX/bin/python3
 export PIPX_HOME=~/.local/opt/pipx_venvs
 # No installing things in the system python
 export PIP_REQUIRE_VIRTUALENV=true

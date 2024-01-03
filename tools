@@ -1,6 +1,6 @@
 # vim: set filetype=sh :
 # Load any additional path-modifying or function-providing tools here
-. /usr/local/bin/virtualenvwrapper_lazy.sh
+. $PACKAGE_MANAGER_PREFIX/bin/virtualenvwrapper_lazy.sh
 
 . "$XDG_CONFIG_HOME"/fzf/fzf.bash
 
