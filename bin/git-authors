@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash -l
 
 # From https://gist.github.com/ezamelczyk/78b9c0dd095f8706a3f6a41e8eae0afd
 # --since="2020-01-01T00:00:00" -- some/path/in/repo
