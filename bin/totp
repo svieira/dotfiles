@@ -96,12 +96,15 @@ extract_secret() {
 if [[ `grep -Ex "^$keyname=.*$" "$keypath"` ]]; then
   otpkey=`extract_secret "$keyname" "$keypath"`
   [ 0 -ne $? ] && exit 1
-
+  found=1
   oathtool --totp -b "$otpkey" $oath_tool_args
-elif [[ `grep -Ex "^#$keyname=.*" "$keypath"` ]]; then
+fi
+if [[ `grep -Ex "^#$keyname=.*" "$keypath"` ]]; then
   rg "^#$keyname=(.*)" "$keypath" --replace '$1' | tr -d '\n' | pbcopy
+  found=1
   echo "$keyname copied"
-else
+fi
+if [[ $found != 1 ]]; then
   fail "Unable to find key or alias named $keyname"
   exit 1
 fi
