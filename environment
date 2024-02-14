@@ -11,7 +11,7 @@ else
 fi
 
 _O=$_P/opt
-PATH="$_O/cargo/.bin:~/.local/bin:$_P/bin:$_P/sbin:$_O/ruby/bin:$_O/python3/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+PATH="$_O/cargo/.bin:$HOME/.local/bin:$_P/bin:$_P/sbin:$_O/ruby/bin:$_O/python3/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 export PACKAGE_MANAGER_PREFIX=$_P
 # Since we are handling the virtual environment information ourselves lets disable the status
