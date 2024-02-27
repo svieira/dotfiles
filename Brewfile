@@ -1,6 +1,4 @@
 tap "homebrew/bundle"
-tap "homebrew/cask"
-tap "homebrew/core"
 
 brew "bash"
 brew "bash-completion@2"
@@ -40,6 +38,7 @@ brew "yarn"
 brew "yarn-completion"
 
 brew "ammonite-repl"
+brew "pipx"
 
 # file "~/dotfiles/local/Brewfile.local"
 # See https://github.com/Homebrew/homebrew-bundle/issues/521#issuecomment-509023309 for why
