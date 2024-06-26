@@ -49,7 +49,7 @@ done
 if grep -i $_brew_prefix/bin/bash /etc/shells > /dev/null; then
   echo "Homebrew-managed bash already in /etc/shells"
 else
-  echo "$_brew_prefix/bin/bash" | sudo tee --append /etc/shells > /dev/null
+  echo "$_brew_prefix/bin/bash" | sudo tee -a /etc/shells > /dev/null
   chsh -s $_brew_prefix/bin/bash
 fi
 
