@@ -77,8 +77,6 @@ for program in $CONFIGDIR/bin/*; do
   ln -s $CONFIGDIR/bin/$program $LOCAL_BIN/$program
 done
 
-PIP_REQUIRE_VIRTUALENV=false pip3 install virtualenvwrapper pipx
-
 # Improve Mac Dictionary
 # Still need to update Dictionary.app preferences manually
 # Go to Preferences of Dictionary.app, select Webster's Unabridged Dictionary and drag it to the top.
