@@ -2,6 +2,7 @@
 # Ensure that XDG-compliant programs know
 # where we want to store our configuration files
 export XDG_CONFIG_HOME=$CONFIGDIR
+export XDG_BIN_HOME=$HOME/.local/bin
 
 export PATH
 if [[ $(sysctl -n machdep.cpu.brand_string) =~ "Apple" ]]; then
