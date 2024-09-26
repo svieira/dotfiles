@@ -40,6 +40,7 @@ brew "yarn-completion"
 
 brew "ammonite-repl"
 brew "pipx"
+brew "dive"
 
 # file "~/dotfiles/local/Brewfile.local"
 # See https://github.com/Homebrew/homebrew-bundle/issues/521#issuecomment-509023309 for why
