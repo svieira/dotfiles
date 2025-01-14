@@ -29,8 +29,9 @@ CARGO_HOME=~/.local/opt/cargo
 
 # Ignore both leading space commands and duplicates
 export HISTCONTROL=ignoreboth:erasedups
-export HISTSIZE=500000
-export HISTFILESIZE=500000
+# Presume modern BASH (4.3+ https://stackoverflow.com/questions/9457233/unlimited-bash-history)
+export HISTSIZE=-1
+export HISTFILESIZE=-1
 # Record each line as it gets issued
 PROMPT_COMMAND='history -a'
 
