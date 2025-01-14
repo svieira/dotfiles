@@ -32,3 +32,5 @@ alias human-num="gnumfmt --from=auto --format=%\\'.2f"
 alias image-optim="/Applications/ImageOptim.app/Contents/MacOS/ImageOptim"
 
 alias trim-whitespace="gsed 's/^[[:blank:]]*//;s/[[:blank:]]*$//'"
+
+alias rot13="tr '[A-Za-z]' '[N-ZA-Mn-za-m]'"
