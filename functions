@@ -351,6 +351,32 @@ HELP
   return;
 }
 
+git-protect-branch() {
+  # Via https://ghost.org/changelog/prevent-master-push/
+  local hook_file=.git/hooks/pre-push
+  cat <<- END > $hook_file
+#!/bin/bash
+
+protected_branch='${1:-main}'
+current_branch=\$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
+
+if [ \$protected_branch = \$current_branch ]
+then
+    read -p "You're about to push \$protected_branch, is that what you intended? [y|n] " -n 1 -r < /dev/tty
+    echo
+    if echo \$REPLY | grep -E '^[Yy]$' > /dev/null
+    then
+        exit 0 # push will execute
+    fi
+    exit 1 # push will not execute
+else
+    exit 0 # push will execute
+fi
+END
+
+  chmod +x $hook_file
+}
+
 update() {
   if command -v update_start; then update_start; fi
   brew update && brew upgrade
