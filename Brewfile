@@ -43,6 +43,8 @@ brew "pipx"
 brew "dive"
 brew "hurl"
 
+brew "pv"
+
 # file "~/dotfiles/local/Brewfile.local"
 # See https://github.com/Homebrew/homebrew-bundle/issues/521#issuecomment-509023309 for why
 # We have to do this and not the more sensible thing
