@@ -220,8 +220,8 @@ tre() {
 history() {
   if [ $# -eq 0 ]; then
     builtin history
-  # Pass -args to the underlying command
-  elif [[ "$1" == "-"* ]]; then
+  # Pass -args and integers to the underlying command
+  elif [[ "$1" == "-"* || "$1" =~ ^[0-9]+$ ]]; then
     builtin history $@
   else
     builtin history | grep $@
