@@ -1,0 +1,8 @@
+#!/usr/bin/env bash -l
+
+# Via https://stackoverflow.com/a/20615706
+
+commitish=$1;
+target=${2:-master}
+
+git rev-list $commitish..$target --ancestry-path | grep -f <(git rev-list $commitish..$target --first-parent) | tail -1;
