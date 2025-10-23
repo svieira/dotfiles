@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+# Inspired by https://codeberg.org/EvanHahn/dotfiles/src/commit/843b9ee13d949d346a4a73ccee2a99351aed285b/home/bin/bin/nato
+declare -A DICTIONARY=(
+    [a]=Alfa
+    [b]=Bravo
+    [c]=Charlie
+    [d]=Delta
+    [e]=Echo
+    [f]=Foxtrot
+    [g]=Golf
+    [h]=Hotel
+    [i]=India
+    [j]=Juliett
+    [k]=Kilo
+    [l]=Lima
+    [m]=Mike
+    [n]=November
+    [o]=Oscar
+    [p]=Papa
+    [q]=Quebec
+    [r]=Romeo
+    [s]=Sierra
+    [t]=Tango
+    [u]=Uniform
+    [v]=Victor
+    [w]=Whiskey
+    [x]=X-ray
+    [y]=Yankee
+    [z]=Zulu
+    [1]=One
+    [2]=Two
+    [3]=Three
+    [4]=Four
+    [5]=Five
+    [6]=Six
+    [7]=Seven
+    [8]=Eight
+    [9]=Nine
+    [0]=Zero
+)
+
+for word in "$@"; do
+    lower_word=$(echo "$word" | tr '[:upper:]' '[:lower:]')
+
+    phonetic_words=()
+
+    for (( i=0; i<${#lower_word}; i++ )); do
+        char="${lower_word:i:1}"
+        phonetic_word="${DICTIONARY[$char]:-$char}"
+        phonetic_words+=("$phonetic_word")
+    done
+
+    (
+        IFS=' '
+        echo "${phonetic_words[*]}"
+    )
+done
