@@ -430,6 +430,11 @@ set_symmetric_difference() {
    sort $1 $2 | uniq -u
 }
 
+longest-common-prefix() {
+  # Via https://stackoverflow.com/a/17475354
+  gsed -e 'N;s/^\(.*\).*\n\1.*$/\1\n\1/;D'
+}
+
 new-password() {
   local SCRIPT_NAME=$FUNCNAME
   local HELP=
