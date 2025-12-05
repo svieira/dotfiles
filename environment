@@ -63,3 +63,5 @@ export NO_UPDATE_NOTIFIER=true
 
 # I prefer to run cleanup at my own time
 export HOMEBREW_NO_INSTALL_CLEANUP=true
+# I also prefer to update when I am ready
+export HOMEBREW_NO_AUTO_UPDATE=1
