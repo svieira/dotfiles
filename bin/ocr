@@ -1,11 +1,34 @@
 #!/usr/bin/env swift
 // Via https://codeberg.org/EvanHahn/dotfiles/
+import AppKit
 import Foundation
 import Vision
+
+func fromClipboard() -> CGImage? {
+  let pasteboard = NSPasteboard.general
+  return (pasteboard.readObjects(forClasses: [NSImage.self], options: nil)?.first as? NSImage)?.cgImage(forProposedRect: nil, context: nil, hints: nil)
+}
+
+func recognizeText(source: ImageSource) async throws -> RecognizeTextRequest.Result? {
+  var recognizeTextRequest = RecognizeTextRequest()
+  recognizeTextRequest.automaticallyDetectsLanguage = true
+  recognizeTextRequest.usesLanguageCorrection = true
+  recognizeTextRequest.recognitionLevel = .accurate
+
+  return switch (source) {
+    case .url(let path): try? await recognizeTextRequest.perform(on: path)
+    case .pasteboard(let cgImage): try? await recognizeTextRequest.perform(on: cgImage!)
+  }
+}
 
 func die(_ msg: String) -> Never {
   fputs("\(msg)\n", stderr)
   exit(1)
+}
+
+enum ImageSource {
+  case pasteboard(CGImage?)
+  case url(URL)
 }
 
 let args = CommandLine.arguments
@@ -14,25 +37,26 @@ if args.count > 2 {
   die("usage: ocr /path/to/image.jpg")
 } else if args.count == 2 {
   useStdIn = args[1] == "-"
-} else if isatty(FileHandle.standardInput.fileDescriptor) {
+} else if isatty(FileHandle.standardInput.fileDescriptor) != 0 {
   useStdIn = true
 } else {
   die("usage: ocr /path/to/image.png")
 }
 
-let path = URL(fileURLWithPath: args[1])
+let source = if useStdIn { ImageSource.pasteboard(fromClipboard()) } else { ImageSource.url(URL(fileURLWithPath: args[1])) }
 
-var recognizeTextRequest = RecognizeTextRequest()
-recognizeTextRequest.automaticallyDetectsLanguage = true
-recognizeTextRequest.usesLanguageCorrection = true
-recognizeTextRequest.recognitionLevel = .accurate
-
-guard let observations = try? await recognizeTextRequest.perform(on: path) else {
+guard let observations = try? await recognizeText(source: source) else {
   die("couldn't recognize text")
+}
+
+if observations.isEmpty {
+  die("No text was found in the image")
 }
 
 for observation in observations {
   if let candidate = observation.topCandidates(1).first {
     print(candidate.string)
+  } else {
+    die("Could not find anything in \(observation)")
   }
 }
