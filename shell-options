@@ -15,3 +15,6 @@ shopt -s histreedit
 shopt -s histverify
 # Turn on extended glob patterns
 shopt -s extglob
+# Allow expanding aliases in non-interactive scripts so that aliases using `trap` run correctly
+shopt -s expand_aliases
+
