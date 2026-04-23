@@ -1,5 +1,3 @@
-tap "homebrew/bundle"
-
 brew "bash"
 brew "bash-completion@2"
 brew "coreutils"
