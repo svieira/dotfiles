@@ -400,7 +400,7 @@ END
 
 update() {
   if command -v update_start; then update_start; fi
-  brew update && brew upgrade
+  brew update && brew upgrade --no-ask
 
   pipx upgrade-all
 
